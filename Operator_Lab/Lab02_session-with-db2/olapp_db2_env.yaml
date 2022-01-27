@@ -1,0 +1,30 @@
+apiVersion: apps.openliberty.io/v1beta2
+kind: OpenLibertyApplication
+metadata:
+  name: liberty-db2-session-env
+  labels:
+    name: liberty-db2-session-env
+spec:
+  applicationImage: <プロジェクト名>/<イメージ・ストリーム名>:<タグ>
+  env:
+    - name: WLP_LOGGING_MESSAGE_FORMAT
+      value: "json"
+    - name: WLP_LOGGING_MESSAGE_SOURCE
+      value: "message,trace,accessLog,ffdc,audit"
+   - name: SERVER_NAME
+    valueFrom:
+      configMapKeyRef:
+        key: server_name
+        name: db2-cm
+    - name: DB2_USER
+      valueFrom:
+        secretKeyRef:
+          key: db2_user
+          name: db2-secret
+    - name: DB2INST1_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          key: db2_password
+          name: db2-secret
+  replicas: 2
+  expose: true

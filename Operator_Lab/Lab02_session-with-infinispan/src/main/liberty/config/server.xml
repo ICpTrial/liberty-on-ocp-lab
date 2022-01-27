@@ -1,0 +1,51 @@
+<!-- tag::copyright[] -->
+<!-- 
+     Copyright (c) 2019, 2021 IBM Corporation and others. 
+     All rights reserved. This program and the accompanying materials 
+     are made available under the terms of the Eclipse Public License 
+     v1.0 which accompanies this distribution, and is available at
+     http://www.eclipse.org/legal/epl-v10.html 
+     
+     Contributors: 
+         IBM Corporation - Initial implementation
+-->
+<!-- end::copyright[] -->
+<server description="Liberty Server for Sessions Management">
+
+    <featureManager>
+        <feature>servlet-4.0</feature>
+        <!-- tag::sessionCache[] -->
+        <feature>sessionCache-1.0</feature>
+        <!-- end::sessionCache[] -->
+        <feature>jaxrs-2.1</feature>
+        <feature>jsonp-1.1</feature>
+        <feature>mpOpenAPI-2.0</feature>
+    </featureManager>
+
+    <variable name="default.http.port" defaultValue="9080"/>
+    <variable name="default.https.port" defaultValue="9443"/>
+    <variable name="app.context.root" defaultValue="guide-sessions"/>
+     
+    <!-- tag::InfinispanLib[] -->
+    <variable name="infinispan.lib" defaultValue="${shared.resource.dir}/infinispan.jar"/>
+    <!-- end::InfinispanLib[] -->
+
+    <httpEndpoint httpPort="${default.http.port}" httpsPort="${default.https.port}"
+        id="defaultHttpEndpoint" host="*" />
+     
+    <httpSessionCache libraryRef="InfinispanLib" enableBetaSupportForInfinispan="true">
+        <properties infinispan.client.hotrod.server_list="${env.SRV_HOST}:${env.SRV_PORT}"/>
+        <properties infinispan.client.hotrod.auth_username="${env.USER_NAME}"/>
+        <properties infinispan.client.hotrod.auth_password="${env.USER_PASSWD}"/>
+        <properties infinispan.client.hotrod.auth_realm="default"/>
+        <properties infinispan.client.hotrod.sasl_mechanism="DIGEST-MD5"/>
+        <properties infinispan.client.hotrod.marshaller="org.infinispan.commons.marshall.JavaSerializationMarshaller"/>
+    </httpSessionCache>
+
+    <library id="InfinispanLib">
+        <fileset dir="${shared.resource.dir}/infinispan" includes="*.jar"/>
+    </library>
+
+    <webApplication location="guide-sessions.war" contextRoot="${app.context.root}" />
+
+</server>

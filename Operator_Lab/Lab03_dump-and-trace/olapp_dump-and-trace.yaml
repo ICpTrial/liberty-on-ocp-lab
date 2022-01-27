@@ -1,0 +1,11 @@
+apiVersion: apps.openliberty.io/v1beta2
+kind: OpenLibertyApplication
+metadata:
+  name: dump-and-trace
+spec:
+  applicationImage: ibmcom/websphere-liberty
+  applicationName: dump-and-trace
+  expose: true
+  serviceability:
+    size: 1Gi
+    storageClassName: ibmc-file-bronze-gid

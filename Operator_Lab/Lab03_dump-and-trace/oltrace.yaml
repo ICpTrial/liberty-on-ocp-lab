@@ -1,0 +1,7 @@
+apiVersion: apps.openliberty.io/v1beta2
+kind: OpenLibertyTrace
+metadata:
+  name: test-trace
+spec:
+  podName: <トレースを取得したいPod名>
+  traceSpecification: '*=info:com.ibm.ws.webcontainer*=all'

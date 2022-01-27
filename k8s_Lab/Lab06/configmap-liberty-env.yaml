@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: liberty-env-config
+data:
+  server.env: |-
+    WLP_LOGGING_CONSOLE_FORMAT=json
+    WLP_LOGGING_CONSOLE_LOGLEVEL=info
+    WLP_LOGGING_CONSOLE_SOURCE=message,trace,accessLog,ffdc
+    IBM_HEAPDUMPDIR=/var/data/crash
+    IBM_JAVACOREDIR=/var/data/crash
+#   IBM_COREDIR=/var/data/crash

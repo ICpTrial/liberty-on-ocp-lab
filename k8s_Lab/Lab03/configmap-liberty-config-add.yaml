@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: liberty-config
+data:
+  metrics.xml: |-
+    <?xml version="1.0" encoding="UTF-8"?>
+      <server description="DefaultApplication server">
+
+      <featureManager>
+          <feature>mpMetrics-3.0</feature>
+          <feature>mpRestClient-2.0</feature>
+      </featureManager>
+
+      <mpMetrics authentication="false"/>
+
+      <basicRegistry id="basic" realm="BasicRealm">
+          <user name="user1" password="" />
+          <user name="${env.USER_NAME}" password="${env.USER_PASSWD}" />
+
+          <group name="AuthorizedGroup">
+              <member name="${env.USER_NAME}" />
+          </group>
+      </basicRegistry>
+
+      <administrator-role>
+          <group>AuthorizedGroup</group>
+      </administrator-role>
+
+      <httpAccessLogging id="accessLogging" filePath="/logs/http_access.log" logFormat='%h %u %{t}W "%r" %s %b %D %{R}W' />
+      <httpEndpoint id="defaultHttpEndpoint" accessLoggingRef="accessLogging" />
+
+    </server>

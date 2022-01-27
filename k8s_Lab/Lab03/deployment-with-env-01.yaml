@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sample-app
+  name: sample-app
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: sample-app
+  template:
+    metadata:
+      labels:
+        app: sample-app
+    spec:
+      containers:
+      - name: app
+        image: <イメージを指定>
+        imagePullPolicy: Always
+        securityContext:
+          runAsUser: 1001
+        ports:
+        - containerPort: 9080
+          name: http
+          protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: os-env-config
+        volumeMounts:
+        - name: server-env-vol
+          mountPath: /config/server.env
+          subPath: server.env
+      volumes:
+      - name: server-env-vol
+        configMap:
+          name: liberty-env-config
+          items:
+          - key: server.env
+            path: server.env
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      serviceAccountName: sample-app
+      terminationGracePeriodSeconds: 30

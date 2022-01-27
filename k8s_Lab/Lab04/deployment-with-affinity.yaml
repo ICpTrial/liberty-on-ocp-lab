@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sample-app
+  name: sample-app
+spec:
+  replicas: 2
+  revisionHistoryLimit: 3
+  progressDeadlineSeconds: 600
+  selector:
+    matchLabels:
+      app: sample-app
+  template:
+    metadata:
+      labels:
+        app: sample-app
+    spec:
+      containers:
+      - name: app
+        image: ibmcom/websphere-liberty:full-java11-openj9-ubi
+        imagePullPolicy: Always
+        securityContext:
+          runAsUser: 1001
+        ports:
+        - containerPort: 9080
+          name: http
+          protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: os-env-config
+        env:
+        - name: USER_NAME
+          valueFrom:
+            secretKeyRef:
+              name: secret-liberty-auth
+              key: username
+        - name: USER_PASSWD
+          valueFrom:
+            secretKeyRef:
+              name: secret-liberty-auth
+              key: password
+        volumeMounts:
+        - name: server-env-vol
+          mountPath: /config/server.env
+          subPath: server.env
+        - name: metrics-config-vol
+          mountPath: /config/configDropins/overrides/metrics.xml
+          subPath: metrics.xml
+      volumes:
+      - name: server-env-vol
+        configMap:
+          name: liberty-env-config
+          items:
+          - key: server.env
+            path: server.env
+      - name: metrics-config-vol
+        configMap:
+          name: liberty-config
+          items:
+          - key: metrics.xml
+            path: metrics.xml
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - sample-app
+              topologyKey: kubernetes.io/hostname
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      serviceAccountName: sample-app
+      terminationGracePeriodSeconds: 30

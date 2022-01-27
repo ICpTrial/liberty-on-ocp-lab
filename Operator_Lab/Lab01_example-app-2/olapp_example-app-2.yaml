@@ -1,0 +1,34 @@
+apiVersion: apps.openliberty.io/v1beta2
+kind: OpenLibertyApplication
+metadata:
+  name: system
+  labels:
+    name: system
+spec:
+  applicationImage: <プロジェクト名>/<イメージ・ストリーム名>:<タグ>
+  env:
+    - name: WLP_LOGGING_MESSAGE_FORMAT
+      value: "json"
+    - name: WLP_LOGGING_MESSAGE_SOURCE
+      value: "message,trace,accessLog,ffdc,audit"
+    - name: MP_MESSAGING_CONNECTOR_LIBERTY_KAFKA_BOOTSTRAP_SERVERS
+      value: "<Kafka ClusterのBootstrapアドレス>"
+---
+apiVersion: apps.openliberty.io/v1beta2
+kind: OpenLibertyApplication
+metadata:
+  name: inventory
+  labels:
+    name: inventory
+spec:
+  applicationImage: <プロジェクト名>/<イメージ・ストリーム名>:<タグ>
+  service:
+    port: 9085
+  expose: true
+  env:
+    - name: WLP_LOGGING_MESSAGE_FORMAT
+      value: "json"
+    - name: WLP_LOGGING_MESSAGE_SOURCE
+      value: "message,trace,accessLog,ffdc,audit"
+    - name: MP_MESSAGING_CONNECTOR_LIBERTY_KAFKA_BOOTSTRAP_SERVERS
+      value: "<Kafka ClusterのBootstrapアドレス>"

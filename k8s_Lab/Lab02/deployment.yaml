@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sample-app
+  name: sample-app
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  progressDeadlineSeconds: 600
+  selector:
+    matchLabels:
+      app: sample-app
+  template:
+    metadata:
+      labels:
+        app: sample-app
+    spec:
+      containers:
+      - name: app
+        image: <作成したイメージに変更>
+        imagePullPolicy: Always
+        securityContext:
+          runAsUser: 1001
+        ports:
+        - containerPort: 9080
+          name: http
+          protocol: TCP
+        env:
+        - name: LANG
+          value: ja_JP.UTF-8
+        - name: LANGUAGE
+          value: ja_JP.UTF-8
+        - name: LC_ALL
+          value: ja_JP.UTF-8
+        - name: TZ
+          value: Asia/Tokyo
+        - name: WLP_LOGGING_CONSOLE_LOGLEVEL
+          value: info
+        - name: WLP_LOGGING_CONSOLE_SOURCE
+          value: message,accessLog,ffdc,audit
+        - name: WLP_LOGGING_CONSOLE_FORMAT
+          value: json
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      serviceAccountName: sample-app
+      terminationGracePeriodSeconds: 30
