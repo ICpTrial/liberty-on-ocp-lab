@@ -16,7 +16,7 @@ Kubernetes Operatorを活用して、WebSphere Liberty実行環境のデプロ�
 
 ## 前提
 [こちら](https://github.com/ICpTrial/liberty-on-ocp-lab)をご参照ください。<br>
-また、各Labの実施にあたってはOpenLiberty Operatorを事前に導入しておく必要があります。詳しくは[こちら](https://github.com/ICpTrial/liberty-on-ocp-lab)をご参照ください。
+また、各Labの実施にあたってはOpenLiberty Operatorを事前に導入しておく必要があります。詳しくは[こちら](https://openliberty.io/docs/21.0.0.12/deployment-openshift.html)をご参照ください。
 
 ## 参考URL
 * [IBM Document - コンテナーでの Liberty の実行](https://www.ibm.com/docs/ja/was-liberty/base?topic=running-liberty-in-container)
