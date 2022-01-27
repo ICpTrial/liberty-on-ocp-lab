@@ -1,14 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    cloudpakName: "IBM WebSphere Hybrid Edition"
-    cloudpakId: "6358611af04743f99f42dadcd6e39d52"
-    productCloudpakRatio: "1:1" 
-    productID: "c6a988d93b0f4d1388200d40ddc84e5b"
-    productName: "IBM WebSphere Application Server Network Deployment"
-    productMetric: "VIRTUAL_PROCESSOR_CORE"
-    productChargedContainers: "All"
   labels:
     app: sample-app
   name: sample-app
@@ -20,6 +12,14 @@ spec:
     matchLabels:
       app: sample-app
   template:
+    annotations:
+      cloudpakName: "IBM WebSphere Hybrid Edition"
+      cloudpakId: "6358611af04743f99f42dadcd6e39d52"
+      productCloudpakRatio: "1:1" 
+      productID: "c6a988d93b0f4d1388200d40ddc84e5b"
+      productName: "IBM WebSphere Application Server Network Deployment"
+      productMetric: "VIRTUAL_PROCESSOR_CORE"
+      productChargedContainers: "All"
     metadata:
       labels:
         app: sample-app
@@ -85,14 +85,6 @@ spec:
         - name: metrics-config-vol
           mountPath: /config/configDropins/overrides/metrics.xml
           subPath: metrics.xml
-#      - name: helper 
-#        image: busybox
-#        imagePullPolicy: Always
-#        command: ["/bin/sleep", "3650d"]
-#        imagePullPolicy: IfNotPresent
-#        volumeMounts:
-#        - mountPath: /var/data/crash
-#          name: dump-volume
       volumes:
       - name: dump-volume
         emptyDir: {}
