@@ -70,7 +70,7 @@ spec:
                 operator: In
                 values:
                 - sample-app
-              topologyKey: kubernetes.io/hostname
+            topologyKey: kubernetes.io/hostname
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       serviceAccountName: sample-app
