@@ -86,17 +86,18 @@ spec:
           items:
           - key: metrics.xml
             path: metrics.xml
-      podAntiAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - sample-app
-              topologyKey: kubernetes.io/hostname
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - sample-app
+              topologyKey: "kubernetes.io/hostname"
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       serviceAccountName: sample-app
